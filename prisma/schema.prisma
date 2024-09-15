@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// 그룹
+model Group {
+  // 그룹 아이디 (Primary Key)
+  id          String  @id @default(uuid())
+  // 그룹명
+  name        String
+  // 그룹 대표 이미지
+  image       String?
+  // 그룹 설명
+  description String?
+  // 그룹 공개 여부
+  isPublic    Boolean
+  // 그룹 비밀번호
+  password    String?
+  // 그룹 좋아요 수
+  likeCount   Int     @default(0)
+
+  memories Memory[] // Group와 Memory의 1:N 관계
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 추억 (게시글)
+model Memory {
+  // 추억 아이디 (Primary Key)
+  id           String   @id @default(uuid())
+  // 그룹 아이디 (Forien Key)
+  groupId  String
+  // 추억 작성자 닉네임
+  nickname     String
+  // 추억 제목
+  title        String
+  // 추억 이미지
+  image        String?
+  // 추억 내용
+  content      String
+  // 추억 장소
+  location     String?
+  // 추억 공개 여부
+  isPublic     Boolean
+  // 추억의 순간
+  moment       DateTime
+  // 추억 비밀번호
+  password     String
+  // 추억 좋아요 수
+  likeCount    Int     @default(0)
+
+  group    Group     @relation(fields: [groupId], references: [id])
+  comments Comment[] // Memory와 Comment의 1:N 관계
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// 댓글
+model Comment {
+  // 댓글 아이디 (Primary Key)
+  id        String   @id @default(uuid())
+  // 추억 아이디 (Forien Key)
+  memoryId String
+  // 댓글 작성자 닉네임
+  nickname  String
+  // 댓글 내용
+  content   String
+  // 댓글 비밀번호
+  password  String
+
+  memory   Memory @relation(fields: [memoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
