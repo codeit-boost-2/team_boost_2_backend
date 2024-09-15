@@ -106,16 +106,28 @@ groupRouter.route('')
 groupRouter.route('/:id')
 
   // 그룹 수정
-  .put(asyncHandler(async (req, res) => {
+  .put(upload.single("image"), asyncHandler(async (req, res) => {
+    console.log("그룹 수정");
     const { id } = req.params;
-    const { name, password, image, isPublic, description } = req.body;
+    const { name, password, description } = req.body;
+    let isPublic = req.body.isPublic;
+    if (isPublic === 'true') isPublic = true;
+    else isPublic = false;
+    
+    const image = `${req.file.filename}`;
+
+    console.log(id);
+    console.log(name);
+    console.log(password);
+    console.log(image);
+    console.log(isPublic);
+    console.log(description);
 
     if (!password) {
       return res.status(400).json({ message: '잘못된 요청입니다' });
     }
 
-    if (isPublic === 'true') isPublic = true;
-    else isPublic = false;
+    console.log("password 확인 완료");
 
     const group = await prisma.group.findUnique({
       where: { id },

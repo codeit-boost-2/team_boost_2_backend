@@ -4,6 +4,7 @@ import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import asyncHandler from '../utils/asyncHandler.js';
 import { getCommentList } from './commentRouter.js';
+import { upload } from '../utils/multer.js';
 
 const prisma = new PrismaClient();
 const memoryRouter = express.Router();
@@ -141,9 +142,14 @@ memoryRouter.route('/:id/isPublic')
 memoryRouter.route('/:id')
 
   // 추억 수정
-  .put(asyncHandler(async (req, res) => {
+  .put(upload.single("image"), asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { nickname, title, content, password, image, location, moment, isPublic } = req.body;
+    const { nickname, title, content, password, location, moment } = req.body;
+    let isPublic = req.body.isPublic;
+    if (isPublic === 'true') isPublic = true;
+    else isPublic = false;
+
+    const image = `${req.file.filename}`;
 
     if (!nickname || !title || !content || !password) {
       return res.status(400).json({ message: '잘못된 요청입니다' });
