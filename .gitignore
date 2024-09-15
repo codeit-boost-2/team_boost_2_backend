@@ -1,0 +1,44 @@
+# dependencies
+/backend/node_modules/
+/frontend/node_modules/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# testing
+/coverage
+
+# production
+/build
+
+# Environment variables
+/backend/.env
+
+# Prisma migrations
+/backend/prisma/migrations/
+
+# Sessions
+/backend/sessions/
+
+# Rest Client
+/backend/http/
+
+# Logs
+*.log
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
