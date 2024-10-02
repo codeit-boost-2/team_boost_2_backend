@@ -25,35 +25,37 @@ model Group {
   likeCount   Int     @default(0)
 
   memories Memory[] // Group와 Memory의 1:N 관계
+  badges   Badge[]  @relation("GroupBadges") // Group과 Badge의 N:M 관계 
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  GroupBadge GroupBadge[]
 }
 
 // 추억 (게시글)
 model Memory {
   // 추억 아이디 (Primary Key)
-  id           String   @id @default(uuid())
+  id        String   @id @default(uuid())
   // 그룹 아이디 (Forien Key)
-  groupId  String
+  groupId   String
   // 추억 작성자 닉네임
-  nickname     String
+  nickname  String
   // 추억 제목
-  title        String
+  title     String
   // 추억 이미지
-  image        String?
+  image     String?
   // 추억 내용
-  content      String
+  content   String
   // 추억 장소
-  location     String?
+  location  String?
   // 추억 공개 여부
-  isPublic     Boolean
+  isPublic  Boolean
   // 추억의 순간
-  moment       DateTime
+  moment    DateTime
   // 추억 비밀번호
-  password     String
+  password  String
   // 추억 좋아요 수
-  likeCount    Int     @default(0)
+  likeCount Int      @default(0)
 
   group    Group     @relation(fields: [groupId], references: [id])
   comments Comment[] // Memory와 Comment의 1:N 관계
@@ -65,18 +67,35 @@ model Memory {
 // 댓글
 model Comment {
   // 댓글 아이디 (Primary Key)
-  id        String   @id @default(uuid())
+  id       String @id @default(uuid())
   // 추억 아이디 (Forien Key)
   memoryId String
   // 댓글 작성자 닉네임
-  nickname  String
+  nickname String
   // 댓글 내용
-  content   String
+  content  String
   // 댓글 비밀번호
-  password  String
+  password String
 
-  memory   Memory @relation(fields: [memoryId], references: [id])
+  memory Memory @relation(fields: [memoryId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Badge {
+  // 뱃지 이름 (Primary Key)
+  badgeName  String       @id
+  groups     Group[]      @relation("GroupBadges") // Group과 Badge의 N:M 관계
+  GroupBadge GroupBadge[]
+}
+
+model GroupBadge {
+  groupId   String
+  badgeName String
+
+  group Group @relation(fields: [groupId], references: [id])
+  badge Badge @relation(fields: [badgeName], references: [badgeName])
+
+  @@id([groupId, badgeName]) // Primary Key
 }
