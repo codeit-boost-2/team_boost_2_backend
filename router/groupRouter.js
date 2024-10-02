@@ -193,15 +193,6 @@ groupRouter.route('/:id/like')
     if (!group) {
       return res.status(404).send({ message: "존재하지 않습니다" });
     };
-    
-    await prisma.group.update({
-      where: { id },
-      data: {
-        likeCount: {
-          increment: 1,
-        },
-      },
-    });
 
     return res.status(200).send({ message: "그룹 공감하기 성공" });
   }));
@@ -309,6 +300,27 @@ groupRouter.route('/:groupId/posts')
         password,
       },
     });
+
+    const group = await prisma.group.findUniqueOrThrow({
+      where: { id: groupId },
+      include: {
+        _count: {
+          select: {
+            memories: true,
+          },
+        },
+      },
+    });
+
+    if (group._count.memories >= 20) {
+      await prisma.groupBadge.create({
+        data: {
+          groupId: group.id,
+          badgeName: '추억왕',
+        },
+      });
+    };
+
     return res.status(201).send(memory);
   }));
 
