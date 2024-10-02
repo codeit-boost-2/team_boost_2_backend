@@ -85,7 +85,7 @@ groupRouter.route('')
     if (isPublic === 'true') isPublic = true;
     else isPublic = false;
 
-    const image = `${req.file.filename}`;
+    const image = req.file ? `${req.file.filename}` : '../defaultImage/defaultImage.jpg';
 
     if (!groupName  || !groupDescription || isPublic === undefined || !password) {
       return res.status(400).send({ message: "잘못된 요청입니다" });
