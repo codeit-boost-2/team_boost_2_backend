@@ -28,7 +28,7 @@ model Group {
 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  GroupHashTag GroupHashTag[]
+  GroupHashtag GroupHashtag[]
 }
 
 // 추억 (게시글)
@@ -61,7 +61,7 @@ model Memory {
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  MemoryHashTag MemoryHashTag[]
+  MemoryHashtag MemoryHashtag[]
 }
 
 // 댓글
@@ -84,46 +84,46 @@ model Comment {
 }
 
 // 해시태그
-model HashTag {
+model Hashtag {
   // 해시태그 아이디 (Primary Key)
-  id   String @id @default(uuid())
-  // 해시태그 이름
-  name String
+  id   String @id
+  // 해시태그 단어
+  word String
 
-  GroupHashTag GroupHashTag[]
-  MemoryHashTag MemoryHashTag[]
+  GroupHashtag GroupHashtag[]
+  MemoryHashtag MemoryHashtag[]
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 }
 
 // 그룹 해시태그 매핑
-model GroupHashTag {
+model GroupHashtag {
   // 매핑 아이디 (Primary Key)
   id        String @id @default(uuid())
   // 그룹 아이디 (Forien Key)
   groupId   String
   // 해시태그 아이디 (Forien Key)
-  hashTagId String
+  HashtagId String
 
   group   Group   @relation(fields: [groupId], references: [id])
-  hashtag HashTag @relation(fields: [hashTagId], references: [id])
+  Hashtag Hashtag @relation(fields: [HashtagId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 // 추억 해시태그 매핑
-model MemoryHashTag {
+model MemoryHashtag {
   // 매핑 아이디 (Primary Key)
   id        String  @id @default(uuid())
   // 추억 아이디 (Forien Key)
   memoryId  String
   // 해시태그 아이디 (Forien Key)
-  hashTagId String
+  HashtagId String
 
   memory    Memory  @relation(fields: [memoryId], references: [id])
-  hashtag   HashTag @relation(fields: [hashTagId], references: [id])
+  Hashtag   Hashtag @relation(fields: [HashtagId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
