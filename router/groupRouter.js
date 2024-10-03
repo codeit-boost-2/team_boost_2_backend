@@ -248,12 +248,10 @@ groupRouter.route('/:id/verifyPassword')
         createdAt: true,
         updatedAt: true,
         introduction: true,
-        include: {
-          groupBadge: {
-            where: { groupId : id },
-            select: {
-              badgeName: true,
-            },
+        groupBadge: {
+          where: { groupId : id },
+          select: {
+            badgeName: true,
           },
         },
       },
