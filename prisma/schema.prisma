@@ -25,7 +25,6 @@ model Group {
   likeCount   Int     @default(0)
 
   memories Memory[] // Group와 Memory의 1:N 관계
-  badges   Badge[]  @relation("GroupBadges") // Group과 Badge의 N:M 관계 
 
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
@@ -86,7 +85,6 @@ model Comment {
 model Badge {
   // 뱃지 이름 (Primary Key)
   badgeName  String       @id
-  groups     Group[]      @relation("GroupBadges") // Group과 Badge의 N:M 관계
   GroupBadge GroupBadge[]
 }
 
