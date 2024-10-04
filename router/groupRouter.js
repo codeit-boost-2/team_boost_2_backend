@@ -240,23 +240,12 @@ groupRouter.route('/:id/verifyPassword')
       select: {
         id: true,
         name: true,
-        image: true,
         isPublic: true,
-        likeCount: true,
-        postCount: true,
-        description: true,
         createdAt: true,
         updatedAt: true,
-        introduction: true,
-        groupBadge: {
-          select: {
-            badge: {
-              select: {
-                badgeName: true,
-              },
-            },
-          },
-        },
+	image: true,
+	likeCount: true,
+	description: true,
       },
     });
 
