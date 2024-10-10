@@ -7,6 +7,16 @@ async function main() {
   await prisma.comment.deleteMany();
   await prisma.memory.deleteMany();
   await prisma.group.deleteMany();
+  await prisma.groupBadge.deleteMany()
+  await prisma.badge.deleteMany();
+
+  const likeKingBadge = await prisma.badge.createMany({
+    data: [
+      { name: '공감왕' },
+      { name: '추억왕' },
+      { name: '어르신' },
+    ],
+  });
 }
 
 main()

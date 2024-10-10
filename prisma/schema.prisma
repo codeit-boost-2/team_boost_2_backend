@@ -26,8 +26,9 @@ model Group {
 
   memories Memory[] // Group와 Memory의 1:N 관계
 
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  groupBadge GroupBadge[]
 }
 
 // 추억 (게시글)
@@ -111,4 +112,19 @@ model MemoryHashtag {
   updatedAt DateTime @updatedAt
 
   @@unique([memoryId, hashtagId]) // Ensure unique mapping for each Memory-Hashtag combination
+  
+model Badge {
+  // 뱃지 이름 (Primary Key)
+  name  String       @id
+  groupBadge GroupBadge[]
+} 
+
+model GroupBadge {
+  groupId   String
+  badgeName String
+
+  group Group @relation(fields: [groupId], references: [id])
+  badge Badge @relation(fields: [badgeName], references: [name])
+
+  @@id([groupId, badgeName]) // Primary Key
 }

@@ -109,6 +109,10 @@ memoryRouter.route('/:id/like')
       where: { id },
     });
 
+    const group = await prisma.group.findUniqueOrThrow({
+      where: { id: post.groupId}
+    });
+
     if (!post) {
       return res.status(404).json({ message: '존재하지 않습니다' });
     }
@@ -121,6 +125,24 @@ memoryRouter.route('/:id/like')
         }
       }
     });
+
+    await prisma.group.update({
+      where: { id: post.groupId },
+      data: {
+        likeCount: {
+          increment: 1
+        }
+      }
+    });
+
+    if (group.likeCount = 10) {
+      const badge = await prisma.groupBadge.create({
+        data: {
+          groupId: post.groupId,
+          badgeName: '공감왕',
+        },
+      });
+    };
 
     return res.status(200).json({ message: '게시글 공감하기 성공' });
   }));

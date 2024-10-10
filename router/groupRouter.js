@@ -86,9 +86,9 @@ groupRouter.route('')
     if (isPublic === 'true') isPublic = true;
     else isPublic = false;
 
-    const image = req.file ? `${req.file.filename}` : '../defaultImage/defaultImage.jpg';
+    const image = req.file ? `${req.file.filename}` : null;
 
-    if (!groupName  || !groupDescription || isPublic === undefined || !password) {
+    if (!groupName || !groupDescription || isPublic === undefined || !password) {
       return res.status(400).send({ message: "잘못된 요청입니다" });
     };
 
@@ -114,7 +114,7 @@ groupRouter.route('/:id')
     let isPublic = req.body.isPublic;
     if (isPublic === 'true') isPublic = true;
     else isPublic = false;
-    
+
     const image = `${req.file.filename}`;
 
     console.log(id);
@@ -167,7 +167,7 @@ groupRouter.route('/:id')
     });
 
     if (!group) {
-      return res.status(404).send({ message: "존재하지 않습니다 "});
+      return res.status(404).send({ message: "존재하지 않습니다 " });
     };
 
     if (group.password !== password) {
@@ -194,15 +194,6 @@ groupRouter.route('/:id/like')
     if (!group) {
       return res.status(404).send({ message: "존재하지 않습니다" });
     };
-    
-    await prisma.group.update({
-      where: { id },
-      data: {
-        likeCount: {
-          increment: 1,
-        },
-      },
-    });
 
     return res.status(200).send({ message: "그룹 공감하기 성공" });
   }));
@@ -227,7 +218,7 @@ groupRouter.route('/:id/verifyPassword')
     };
   }));
 
-  groupRouter.route('/:id/:page/:pageSize')
+groupRouter.route('/:id/:page/:pageSize')
 
   // 그룹 상세 정보 조회 (추억 목록 조회)
   .get(asyncHandler(async (req, res) => {
@@ -250,9 +241,19 @@ groupRouter.route('/:id/verifyPassword')
       select: {
         id: true,
         name: true,
+        image: true,
         description: true,
+        likeCount: true,
+        isPublic: true,
         createdAt: true,
         updatedAt: true,
+      },
+    });
+
+    const badge = await prisma.groupBadge.findMany({
+      where: { groupId : id },
+      select: {
+        badgeName: true,
       },
     });
 
@@ -271,13 +272,14 @@ groupRouter.route('/:id/verifyPassword')
 
     return res.status(200).json({
       group,
+      badge,
       memories: {
         currentPage: page,
         totalPages: Math.ceil(memoriesResult.totalItemCount / pageSize),
         totalItemCount: memoriesResult.totalItemCount,
         data: memoriesResult.data,
       },
-    }); 
+    });
   }));
 
 groupRouter.route('/:groupId/posts')
@@ -321,6 +323,26 @@ groupRouter.route('/:groupId/posts')
         }
       });
     }
+
+    const group = await prisma.group.findUniqueOrThrow({
+      where: { id: groupId },
+      include: {
+        _count: {
+          select: {
+            memories: true,
+          },
+        },
+      },
+    });
+
+    if (group._count.memories === 20) {
+      await prisma.groupBadge.create({
+        data: {
+          groupId: group.id,
+          badgeName: '추억왕',
+        },
+      });
+    };
 
     return res.status(201).send(memory);
   }));
