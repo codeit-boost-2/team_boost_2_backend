@@ -28,7 +28,6 @@ model Group {
 
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  GroupHashtag GroupHashtag[]
 }
 
 // 추억 (게시글)
@@ -58,10 +57,10 @@ model Memory {
 
   group    Group     @relation(fields: [groupId], references: [id])
   comments Comment[] // Memory와 Comment의 1:N 관계
+  MemoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-  MemoryHashtag MemoryHashtag[]
 }
 
 // 댓글
@@ -90,27 +89,10 @@ model Hashtag {
   // 해시태그 단어
   word String
 
-  GroupHashtag GroupHashtag[]
-  MemoryHashtag MemoryHashtag[]
+  MemoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-}
-
-// 그룹 해시태그 매핑
-model GroupHashtag {
-  // 매핑 아이디 (Primary Key)
-  id        String @id @default(uuid())
-  // 그룹 아이디 (Forien Key)
-  groupId   String
-  // 해시태그 아이디 (Forien Key)
-  HashtagId String
-
-  group   Group   @relation(fields: [groupId], references: [id])
-  Hashtag Hashtag @relation(fields: [HashtagId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 // 추억 해시태그 매핑
