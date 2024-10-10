@@ -12,9 +12,9 @@ async function main() {
 
   const likeKingBadge = await prisma.badge.createMany({
     data: [
-      { badgeName: '공감왕' },
-      { badgeName: '추억왕' },
-      { badgeName: '어르신' },
+      { name: '공감왕' },
+      { name: '추억왕' },
+      { name: '어르신' },
     ],
   });
 }
