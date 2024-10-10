@@ -57,7 +57,7 @@ model Memory {
 
   group    Group     @relation(fields: [groupId], references: [id])
   comments Comment[] // Memory와 Comment의 1:N 관계
-  MemoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
+  memoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -89,7 +89,7 @@ model Hashtag {
   // 해시태그 단어
   word String
 
-  MemoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
+  memoryHashtag MemoryHashtag[] // Memory와 Hashtag의 N:M 관계
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -102,11 +102,13 @@ model MemoryHashtag {
   // 추억 아이디 (Forien Key)
   memoryId  String
   // 해시태그 아이디 (Forien Key)
-  HashtagId String
+  hashtagId String
 
   memory    Memory  @relation(fields: [memoryId], references: [id])
-  Hashtag   Hashtag @relation(fields: [HashtagId], references: [id])
+  hashtag   Hashtag @relation(fields: [hashtagId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([memoryId, hashtagId]) // Ensure unique mapping for each Memory-Hashtag combination
 }

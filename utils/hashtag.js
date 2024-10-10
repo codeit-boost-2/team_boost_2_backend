@@ -4,6 +4,23 @@ import shorthash from 'shorthash';
 
 const prisma = new PrismaClient();
 
+export async function getHashtagListByMemoryId(memoryId) {
+  const memory = await prisma.memory.findUnique({
+    where: { id: memoryId },
+    include: {
+      MemoryHashtag: {
+        include: {
+          Hashtag: true,
+        },
+      },
+    },
+  });
+
+  const hashtagWords = memory?.memoryHashtag.map((memoryHashtag) => memoryHashtag.hashtag.word) || [];
+  console.log(hashtagWords);
+  return hashtagWords;
+}
+
 export async function getHashtagIdByWord(word) {
   const id = shorthash.unique(word);
 
