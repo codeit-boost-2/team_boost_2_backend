@@ -8,9 +8,9 @@ export async function getHashtagListByMemoryId(memoryId) {
   const memory = await prisma.memory.findUnique({
     where: { id: memoryId },
     include: {
-      MemoryHashtag: {
+      memoryHashtag: {
         include: {
-          Hashtag: true,
+          hashtag: true,
         },
       },
     },
