@@ -258,7 +258,7 @@ groupRouter.route('/:id/:page/:pageSize')
     });
 
     const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear()-1);
+    oneYearAgo.setDate(oneYearAgo.getDate()-1);
 
     const createdAt = new Date(group.createdAt);
 
