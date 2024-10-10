@@ -84,7 +84,7 @@ model Comment {
 
 model Badge {
   // 뱃지 이름 (Primary Key)
-  badgeName  String       @id
+  name  String       @id
   GroupBadge GroupBadge[]
 }
 
@@ -93,7 +93,7 @@ model GroupBadge {
   badgeName String
 
   group Group @relation(fields: [groupId], references: [id])
-  badge Badge @relation(fields: [badgeName], references: [badgeName])
+  badge Badge @relation(fields: [badgeName], references: [name])
 
   @@id([groupId, badgeName]) // Primary Key
 }
