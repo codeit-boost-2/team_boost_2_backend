@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import asyncHandler from '../utils/asyncHandler.js';
 import { getMemoryList } from './memoryRouter.js';
 import { upload } from '../utils/multer.js';
+import { getHashtagIdByWord } from '../utils/hashtag.js';
 
 const prisma = new PrismaClient();
 const groupRouter = express.Router();
@@ -312,6 +313,17 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
+    const hashtags = data.hashtags;
+    for (const hashtag in hashtags) {
+      const hashtagId = getHashtagIdByWord(hashtag);
+      await prisma.memoryHashtag.create({
+        data: {
+          memoryId: memory.id,
+          hashtagId: hashtagId,
+        }
+      });
+    }
+
     const group = await prisma.group.findUniqueOrThrow({
       where: { id: groupId },
       include: {
@@ -323,7 +335,7 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
-    if (group._count.memories >= 20) {
+    if (group._count.memories === 20) {
       await prisma.groupBadge.create({
         data: {
           groupId: group.id,
