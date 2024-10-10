@@ -133,7 +133,7 @@ memoryRouter.route('/:id/like')
       }
     });
 
-    if (group.likeCount >= 10000) {
+    if (group.likeCount >= 10) {
       await prisma.groupBadge.create({
         data: {
           groupId: group.id,
