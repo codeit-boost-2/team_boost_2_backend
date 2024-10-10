@@ -249,7 +249,7 @@ groupRouter.route('/:id/:page/:pageSize')
       },
     });
 
-    const badge = await prisma.groupBadge.findMany({
+    const badge = await prisma.groupBadge.group({
       where: { groupId : id },
       select: {
         badgeName: true,
