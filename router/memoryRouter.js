@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import asyncHandler from '../utils/asyncHandler.js';
 import { getCommentList } from './commentRouter.js';
 import { upload } from '../utils/multer.js';
+import { getHashtagListByMemoryId } from '../utils/hashtag.js';
 
 const prisma = new PrismaClient();
 const memoryRouter = express.Router();
@@ -68,6 +69,7 @@ export async function getMemoryList({ groupId, page, pageSize, sortBy, keyword, 
     likeCount: post.likeCount,
     commentCount: post._count.comments,
     createdAt: post.createdAt,
+    hashtag: getHashtagListByMemoryId(post.id)
   }));
 
   return {
@@ -231,6 +233,8 @@ memoryRouter.route('/:id/comments')
     const memory = await prisma.memory.findUniqueOrThrow({
       where: { id },
     });
+
+    memory.hashtag = getHashtagListByMemoryId(id);
 
     const commentResult = await getCommentList({
       memoryId: id

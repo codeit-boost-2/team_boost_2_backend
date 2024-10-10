@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import asyncHandler from '../utils/asyncHandler.js';
 import { getMemoryList } from './memoryRouter.js';
 import { upload } from '../utils/multer.js';
+import { getHashtagIdByWord } from '../utils/hashtag.js';
 
 const prisma = new PrismaClient();
 const groupRouter = express.Router();
@@ -309,6 +310,18 @@ groupRouter.route('/:groupId/posts')
         password,
       },
     });
+
+    const hashtags = data.hashtags;
+    for (const hashtag in hashtags) {
+      const hashtagId = getHashtagIdByWord(hashtag);
+      await prisma.memoryHashtag.create({
+        data: {
+          memoryId: memory.id,
+          hashtagId: hashtagId,
+        }
+      });
+    }
+
     return res.status(201).send(memory);
   }));
 
