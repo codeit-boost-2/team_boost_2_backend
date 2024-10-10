@@ -28,7 +28,7 @@ model Group {
 
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
-  GroupBadge GroupBadge[]
+  groupBadge GroupBadge[]
 }
 
 // 추억 (게시글)
@@ -85,8 +85,8 @@ model Comment {
 model Badge {
   // 뱃지 이름 (Primary Key)
   name  String       @id
-  GroupBadge GroupBadge[]
-}
+  groupBadge GroupBadge[]
+} 
 
 model GroupBadge {
   groupId   String

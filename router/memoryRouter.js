@@ -136,7 +136,7 @@ memoryRouter.route('/:id/like')
     if (group.likeCount >= 10) {
       const badge = await prisma.groupBadge.create({
         data: {
-          groupId: group.id,
+          groupId: post.groupId,
           badgeName: '공감왕',
         },
       });
