@@ -252,7 +252,7 @@ groupRouter.route('/:id/:page/:pageSize')
 
     const existingBadge = await prisma.groupBadge.findFirst({
       where: {
-        groupId: group.Id,
+        groupId: group.id,
         badgeName: '어르신'
       },
     });
@@ -266,13 +266,12 @@ groupRouter.route('/:id/:page/:pageSize')
       if(!existingBadge){
         const newBadge = await prisma.groupBadge.create({
           data:{
-            groupId: group.Id,
+            groupId: group.id,
             badgeName: '어르신',
           },
         });
       };
     };
-
 
     const badge = await prisma.groupBadge.findMany({
       where: { groupId : id },
