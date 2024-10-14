@@ -360,7 +360,7 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
-    if (group._count.memories == 3) {
+    if (group._count.memories == 36) {
       await prisma.groupBadge.create({
         data: {
           groupId: group.id,
