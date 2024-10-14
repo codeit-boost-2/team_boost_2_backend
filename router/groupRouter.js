@@ -250,6 +250,30 @@ groupRouter.route('/:id/:page/:pageSize')
       },
     });
 
+    const existingBadge = await prisma.groupBadge.findFirst({
+      where: {
+        groupId: group.Id,
+        badgeName: '어르신'
+      },
+    });
+
+    const oneYearAgo = new Date();
+    oneYearAgo.setDate(oneYearAgo.getDate()-1);
+
+    const createdAt = new Date(group.createdAt);
+
+    if (createdAt <= oneYearAgo) {
+      if(!existingBadge){
+        const newBadge = await prisma.groupBadge.create({
+          data:{
+            groupId: group.Id,
+            badgeName: '어르신',
+          },
+        });
+      };
+    };
+
+
     const badge = await prisma.groupBadge.findMany({
       where: { groupId : id },
       select: {
@@ -337,7 +361,7 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
-    if (group._count.memories === 20) {
+    if (group._count.memories == 3) {
       await prisma.groupBadge.create({
         data: {
           groupId: group.id,

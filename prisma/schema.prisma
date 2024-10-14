@@ -113,7 +113,7 @@ model MemoryHashtag {
 
   @@unique([memoryId, hashtagId])
 }
-  
+
 model Badge {
   // 뱃지 이름 (Primary Key)
   name  String       @id
