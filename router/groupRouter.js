@@ -313,15 +313,26 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
-    const hashtags = req.body.hashtag.split(",");
-    console.log(hashtags);
-    for (const tag of hashtags) {
-      const hashtagId = await getHashtagIdByWord(tag);
+    // const hashtags = req.body.hashtag.split(",");
+    // console.log(hashtags);
+    // for (const tag of hashtags) {
+    //   const hashtagId = await getHashtagIdByWord(tag);
+    //   await prisma.memoryHashtag.create({
+    //     data: {
+    //       memoryId: memory.id,
+    //       hashtagId: hashtagId,
+    //     },
+    //   });
+    // }
+
+    const hashtags = req.body.hashtags;
+    for (const hashtag in hashtags) {
+      const hashtagId = getHashtagIdByWord(hashtag);
       await prisma.memoryHashtag.create({
         data: {
           memoryId: memory.id,
           hashtagId: hashtagId,
-        },
+        }
       });
     }
 
