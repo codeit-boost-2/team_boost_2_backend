@@ -23,15 +23,22 @@ export async function getHashtagListByMemoryId(memoryId) {
 
 export async function getHashtagIdByWord(word) {
   const id = shorthash.unique(word);
+  console.log(word);
+  console.log(id);
 
   const hashtag = await prisma.hashtag.findUnique({
     where: { id },
   });
 
+  console.log(hashtag);
+
   if (!hashtag) {
+    console.log("make");
     const newHashtag = await prisma.hashtag.create({
-      id,
-      word,
+      data: {
+        id,
+        word,
+      },
     });
   }
 

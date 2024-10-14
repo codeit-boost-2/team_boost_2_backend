@@ -70,7 +70,7 @@ export async function getMemoryList({ groupId, page, pageSize, sortBy, keyword, 
       likeCount: post.likeCount,
       commentCount: post._count.comments,
       createdAt: post.createdAt,
-      hashtag: await getHashtagListByMemoryId(post.id), // await 추가
+      hashtag: await getHashtagListByMemoryId(post.id),
     }))
   );  
 
