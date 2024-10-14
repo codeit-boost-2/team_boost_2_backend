@@ -314,6 +314,8 @@ groupRouter.route('/:groupId/posts')
     });
 
     const hashtags = req.body.hashtags;
+    console.log(hashtags);
+    
     for (const hashtag in hashtags) {
       const hashtagId = getHashtagIdByWord(hashtag);
       await prisma.memoryHashtag.create({
