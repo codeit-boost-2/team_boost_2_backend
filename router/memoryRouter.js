@@ -58,19 +58,21 @@ export async function getMemoryList({ groupId, page, pageSize, sortBy, keyword, 
     }),
   ]);
 
-  const data = posts.map(post => ({
-    id: post.id,
-    nickname: post.nickname,
-    title: post.title,
-    image: post.image,
-    location: post.location,
-    moment: post.moment,
-    isPublic: post.isPublic,
-    likeCount: post.likeCount,
-    commentCount: post._count.comments,
-    createdAt: post.createdAt,
-    hashtag: getHashtagListByMemoryId(post.id)
-  }));
+  const data = await Promise.all(
+    posts.map(async (post) => ({
+      id: post.id,
+      nickname: post.nickname,
+      title: post.title,
+      image: post.image,
+      location: post.location,
+      moment: post.moment,
+      isPublic: post.isPublic,
+      likeCount: post.likeCount,
+      commentCount: post._count.comments,
+      createdAt: post.createdAt,
+      hashtag: await getHashtagListByMemoryId(post.id),
+    }))
+  );  
 
   return {
     totalItemCount,
@@ -215,6 +217,8 @@ memoryRouter.route('/:id')
     const { id } = req.params;
     const { password } = req.body;
 
+    console.log(req.body);
+
     if (!password) {
       return res.status(400).json({ message: '잘못된 요청입니다' });
     }
@@ -256,7 +260,7 @@ memoryRouter.route('/:id/comments')
       where: { id },
     });
 
-    memory.hashtag = getHashtagListByMemoryId(id);
+    memory.hashtag = await getHashtagListByMemoryId(id);
 
     const commentResult = await getCommentList({
       memoryId: id
