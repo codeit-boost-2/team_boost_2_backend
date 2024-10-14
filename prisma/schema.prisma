@@ -111,7 +111,8 @@ model MemoryHashtag {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([memoryId, hashtagId]) // Ensure unique mapping for each Memory-Hashtag combination
+  @@unique([memoryId, hashtagId])
+}
   
 model Badge {
   // 뱃지 이름 (Primary Key)

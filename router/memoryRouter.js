@@ -256,7 +256,7 @@ memoryRouter.route('/:id/comments')
       where: { id },
     });
 
-    memory.hashtag = getHashtagListByMemoryId(id);
+    memory.hashtag = await getHashtagListByMemoryId(id);
 
     const commentResult = await getCommentList({
       memoryId: id
