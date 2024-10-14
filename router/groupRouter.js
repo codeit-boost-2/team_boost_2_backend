@@ -313,11 +313,11 @@ groupRouter.route('/:groupId/posts')
       },
     });
 
-    const hashtags = req.body.hashtags;
-    console.log(hashtags);
-    
-    for (const hashtag in hashtags) {
-      const hashtagId = getHashtagIdByWord(hashtag);
+    const hashtag = req.body.hashtag;
+    console.log(hashtag);
+
+    for (const tag in hashtags) {
+      const hashtagId = getHashtagIdByWord(tag);
       await prisma.memoryHashtag.create({
         data: {
           memoryId: memory.id,
