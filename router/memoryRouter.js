@@ -58,19 +58,21 @@ export async function getMemoryList({ groupId, page, pageSize, sortBy, keyword, 
     }),
   ]);
 
-  const data = posts.map(post => ({
-    id: post.id,
-    nickname: post.nickname,
-    title: post.title,
-    image: post.image,
-    location: post.location,
-    moment: post.moment,
-    isPublic: post.isPublic,
-    likeCount: post.likeCount,
-    commentCount: post._count.comments,
-    createdAt: post.createdAt,
-    hashtag: getHashtagListByMemoryId(post.id)
-  }));
+  const data = await Promise.all(
+    posts.map(async (post) => ({
+      id: post.id,
+      nickname: post.nickname,
+      title: post.title,
+      image: post.image,
+      location: post.location,
+      moment: post.moment,
+      isPublic: post.isPublic,
+      likeCount: post.likeCount,
+      commentCount: post._count.comments,
+      createdAt: post.createdAt,
+      hashtag: await getHashtagListByMemoryId(post.id), // await 추가
+    }))
+  );  
 
   return {
     totalItemCount,
