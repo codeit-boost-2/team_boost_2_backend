@@ -217,6 +217,8 @@ memoryRouter.route('/:id')
     const { id } = req.params;
     const { password } = req.body;
 
+    console.log(req.body);
+
     if (!password) {
       return res.status(400).json({ message: '잘못된 요청입니다' });
     }
